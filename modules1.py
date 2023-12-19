@@ -5,7 +5,6 @@ from scapy.all import *
 import asyncio
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
-
 class PortScanner:
     """
     Class for scanning ports from an x port to y port
@@ -83,7 +82,7 @@ class PortOverload:
 
 
 if __name__ == "__main__":
-    target_ip = '66.225.241.37'
+    target_ip = ''
     port_scanner = PortScanner(target_ip, 1, 2)
     open_ports = port_scanner.scan_range()
     print(f"Open Ports: {open_ports}")

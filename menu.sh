@@ -17,7 +17,7 @@ function brute_port_scan() {
     python3 portscanner.py -i "$IP" -s "$SP" -e "$EP"
 }
 
-# DDOS FUNCTION
+# DDOS FUNCTION 
 function ddos_attack() {
     chmod +x ddos.py
     read -p "Target IP: " IP
@@ -51,6 +51,7 @@ function ip_info() {
     echo -e "Country: $COUNTRY\nRegion: $REGION\nCity: $CITY\nLocation: $LOCATION\nOrganization: $ORGANIZATION\nPostal: $POSTAL"
 }
 
+
 while true; do
     clear
     echo -e "${RED}__________        .__           .__       ${RESET}"
@@ -60,6 +61,8 @@ while true; do
     echo -e "${RED} |____|    / ____||___|  /__/\_ \___|  /  ${RESET}"
     echo -e "${BLUE}           \/          \/      \/    \/   ${RESET}"
     echo -e "${GREEN}MADE BY BIGBUDDA${RESET}\n"
+    sleep 1
+    echo -e "${RED}FOR USING THIS PROGRAM YOU MAY NEED SOME APIs${RESET}\n"
     sleep 2
     PS3='ENTER YOUR CHOICE >> '
     options=('[*] BRUTE PORT SCAN [*]' '[*] DDOS [*]' '[*] PACKAGE CAPTURER [*]' '[*] IP INFO [*]' '[*] FAKE IDENTITY [*]' '[*] EXIT [*]')
