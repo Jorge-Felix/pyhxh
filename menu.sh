@@ -51,6 +51,15 @@ function ip_info() {
     echo -e "Country: $COUNTRY\nRegion: $REGION\nCity: $CITY\nLocation: $LOCATION\nOrganization: $ORGANIZATION\nPostal: $POSTAL"
 }
 
+function dirfinder(){
+    chmod +x dirfinder.py
+    read -p "URL to be explored: " URL
+    echo -e "${RED}REMEMBER THAT THE WORDLIST HAVE TO BE IN THE WORDLISTS DIRECTORY${RESET}"
+    sleep 1
+    read -p "Wordlist name: " WORDLIST
+    python3 dirfinder.py -u $URL -w $WORDLIST
+}
+
 
 while true; do
     clear
@@ -65,7 +74,7 @@ while true; do
     echo -e "${RED}FOR USING THIS PROGRAM YOU MAY NEED SOME APIs${RESET}\n"
     sleep 2
     PS3='ENTER YOUR CHOICE >> '
-    options=('[*] BRUTE PORT SCAN [*]' '[*] DDOS [*]' '[*] PACKAGE CAPTURER [*]' '[*] IP INFO [*]' '[*] FAKE IDENTITY [*]' '[*] EXIT [*]')
+    options=('[*] BRUTE PORT SCAN [*]' '[*] DDOS [*]' '[*] PACKAGE CAPTURER [*]' '[*] IP INFO [*]' '[*] FAKE IDENTITY [*]' '[*] DIRFINDER [*]' '[*] EXIT [*]')
 
     select opt in "${options[@]}"
     do
@@ -76,6 +85,7 @@ while true; do
             "[*] IP INFO [*]") ip_info;;
             "[*] FAKE IDENTITY [*]") python3 fakeInfo.py;;
             "[*] EXIT [*]") exit;;
+            "[*] DIRFINDER [*]") dirfinder;;
             
         esac
         read -n 1 -s -r -p "Press 'c' to continue..."
