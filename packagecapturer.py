@@ -12,9 +12,9 @@ args = parser.parse_args()
 
 COUNT = args.c
 OUTPUT = args.o
-s = socket.socket(socket.AF_INET,socket.SOCK_DGRAM)
-s.connect(("8.8.8.8",80))
-own_ip:str = s.getsockname()[0]
+s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+s.connect(("8.8.8.8", 80))
+own_ip: str = s.getsockname()[0]
 frame = Ether() / IP()
 
 print("[*]INFO[*]")
@@ -31,7 +31,6 @@ def get_protocol_name(proto_num):
         return 'UDP'
     else:
         return 'Unknown'
-
 
 
 def packets_to_dataframe(packets):
@@ -52,11 +51,10 @@ def packets_to_dataframe(packets):
                 dest_port = packet[UDP].dport
 
             # Check if the packet has the Raw layer
-            if Raw in packet:
+            if Raw in packet and packet[Raw].load is not None:
                 packet_size = len(packet[Raw])
                 packet_data = str(packet[Raw].load)
 
-            
             row = {
                 'Protocol': protocol_name,
                 'Source': packet[IP].src,
@@ -80,11 +78,9 @@ def packets_to_dataframe(packets):
                 dest_port = packet[UDP].dport
 
             # Check if the packet has the Raw layer
-            if Raw in packet:
+            if Raw in packet and packet[Raw].load is not None:
                 packet_size = len(packet[Raw])
                 packet_data = str(packet[Raw].load)
-
-                
 
             row = {
                 'Protocol': protocol_name,
@@ -92,7 +88,7 @@ def packets_to_dataframe(packets):
                 'Destination': packet[IPv6].dst,
                 'Destination Port': dest_port,
                 'Packet Size': packet_size,
-                'Packet Data': bytes(packet_data)
+                'Packet Data': packet_data
             }
             rows.append(row)
 
@@ -104,5 +100,6 @@ def packets_to_dataframe(packets):
     elif OUTPUT.lower() == 'n':
         return df
     return df
+
 
 print(packets_to_dataframe(packets))
