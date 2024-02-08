@@ -1,5 +1,7 @@
 #!/bin/bash
 
+chmod +x *.py
+
 #Ansi colors
 RED='\033[0;31m'
 GREEN='\033[0;32m'
@@ -10,7 +12,6 @@ RESET='\033[0m'
 
 # Portscan function
 function brute_port_scan() {
-    chmod +x portscanner.py
     read -p "Target IP: " IP
     read -p "Starting port: " SP
     read -p "Ending port: " EP
@@ -19,7 +20,6 @@ function brute_port_scan() {
 
 # DDOS FUNCTION 
 function ddos_attack() {
-    chmod +x ddos.py
     read -p "Target IP: " IP
     read -p "Target port: " PORT
     sudo python3 ddos.py -i "$IP" -p "$PORT"
@@ -27,7 +27,6 @@ function ddos_attack() {
 
 # Package capturing function
 function package_capturer() {
-    chmod +x packagecapturer.py
     read -p "Count: " COUNT
     read -p "Want a CSV output file? (y/n): " OUTPUT
     if [[ $OUTPUT == 'Y' || $OUTPUT == 'y' ]]; then
@@ -52,12 +51,38 @@ function ip_info() {
 }
 
 function dirfinder(){
-    chmod +x dirfinder.py
     read -p "URL to be explored: " URL
     echo -e "${RED}REMEMBER THAT THE WORDLIST HAVE TO BE IN THE WORDLISTS DIRECTORY${RESET}"
     sleep 1
     read -p "Wordlist name: " WORDLIST
     python3 dirfinder.py -u $URL -w $WORDLIST
+}
+
+function xss_detection(){
+
+    read -p "URL to be analyzed: " URL
+    echo -e "$URL is about to be analyzed..."
+    sleep 2
+    python3 xss_detection.py -u $URL
+
+}
+
+function sql_injection(){
+    read -p "URL to be injected: " URL
+    read -p "Threads (MANDATORY): " THREADS
+    read -p "Wanna use proxy? (y/N): " PROXY
+    
+    echo -e "${RED}$URL is about to be analyzed...${RESET}"
+    sleep 2
+    
+    if [[ $PROXY == 'Y' || $PROXY == 'y' ]];then
+        python3 sql_injection.py -u $URL --threads $THREADS --use-proxy
+        
+    else 
+        python3 sql_injection.py -u $URL --threads $THREADS
+        
+    fi
+
 }
 
 
@@ -74,7 +99,7 @@ while true; do
     echo -e "${RED}FOR USING THIS PROGRAM YOU MAY NEED SOME APIs${RESET}\n"
     sleep 2
     PS3='ENTER YOUR CHOICE >> '
-    options=('[*] BRUTE PORT SCAN [*]' '[*] DDOS [*]' '[*] PACKAGE CAPTURER [*]' '[*] IP INFO [*]' '[*] FAKE IDENTITY [*]' '[*] DIRFINDER [*]' '[*] EXIT [*]')
+    options=('[*] BRUTE PORT SCAN [*]' '[*] DDOS [*]' '[*] PACKAGE CAPTURER [*]' '[*] IP INFO [*]' '[*] FAKE IDENTITY [*]' '[*] DIRFINDER [*]' '[*] XSS DETECTION [*]' '[*] SQL INJECTION [*]' '[*] EXIT [*]')
 
     select opt in "${options[@]}"
     do
@@ -86,6 +111,8 @@ while true; do
             "[*] FAKE IDENTITY [*]") python3 fakeInfo.py;;
             "[*] EXIT [*]") exit;;
             "[*] DIRFINDER [*]") dirfinder;;
+            "[*] XSS DETECTION [*]") xss_detection;;
+            "[*] SQL INJECTION [*]") sql_injection;;
             
         esac
         read -n 1 -s -r -p "Press 'c' to continue..."

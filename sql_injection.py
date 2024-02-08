@@ -87,7 +87,7 @@ def main():
     num_threads = args.threads
     use_proxy = args.use_proxy
 
-    # You can add custom headers if needed
+    #You can add custom headers if needed
     custom_headers = {
         'Custom-Header': 'Header-Value',
     }

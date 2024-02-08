@@ -15,9 +15,9 @@ class PortScanner:
         Initialization of the Parameters for PortScanner
 
         Parameters:
-        - target_ip (str): Target ip direction
+        - target_ip (str): Target IP address
         - start (int): Starting port.
-        - end (int): ending port.
+        - end (int): Ending port.
         """
         self.target_ip = target_ip
         self.start = start
@@ -25,13 +25,13 @@ class PortScanner:
 
     def scan_port(self, port) -> int:
         """
-        Scan an specific port in the given ip
+        Scan a specific port on the given IP address
 
         Parameters:
-        - port (int): port to be scanned.
+        - port (int): Port to be scanned.
 
         Returns:
-        - int: Port num if it is opened, 0 if it is closed.
+        - int: Port number if it is opened, 0 if it is closed.
         """
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         sock.settimeout(1)
@@ -43,23 +43,39 @@ class PortScanner:
 
     def scan_range(self) -> list[int]:
         """
-        Scan the given range of ports and put it into an array, only if they're opened
+        Scan the given range of ports and put them into an array if they're opened
 
         Returns:
         - list[int]: Open ports array.
         """
         open_ports: list[int] = []
         with ThreadPoolExecutor(max_workers=10) as executor:
-            #Create futures for the scan_port function in paralel
+            # Create futures for the scan_port function in parallel
             futures = [executor.submit(self.scan_port, port) for port in range(self.start, self.end + 1)]
 
-            #Monitore the progress using tqdm and process the results
+            # Monitor the progress using tqdm and process the results
             for future in tqdm(as_completed(futures), total=len(futures), desc="Scanning Ports"):
                 result = future.result()
                 if result != 0:
                     open_ports.append(result)
 
         return open_ports
+
+    def get_service_name(self, port) -> str:
+        """
+        Get the common service name associated with a given port.
+
+        Parameters:
+        - port (int): Port number.
+
+        Returns:
+        - str: Common service name.
+        """
+        try:
+            service_name = socket.getservbyport(port)
+            return service_name
+        except (socket.error, OSError):
+            return "Unknown Service"
 
 
 #DDOS

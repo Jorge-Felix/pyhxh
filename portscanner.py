@@ -20,13 +20,15 @@ if __name__ == "__main__":
     try:
         port_scanner = PortScanner(IP, starting_point, ending_point)
         open_ports:list[int] = port_scanner.scan_range()
-        print(f"Open Ports: {open_ports}")
+        for port in open_ports:
+            service_name = port_scanner.get_service_name(port)
+            print(f"{Fore.YELLOW}Port {port} is open, commonly used for {service_name}{Style.RESET_ALL}")
         opt:str = input(str(Fore.BLUE + "Wanna make a deeper scan with Network maping (y/n): " + Style.RESET_ALL))
         if opt == 'y' or 'Y':
             for port in open_ports:
                 call(f"python3 open_ports_functions.py -i {IP} -p {port}", shell=True)
         else:
-            sys.stdout.write("Returning to main menu...")
+            sys.stdout.write(Fore.RED + "Returning to main menu..." + Style.RESET_ALL)
             time.sleep(3)
             
     except KeyboardInterrupt:
